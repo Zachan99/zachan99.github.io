@@ -1,43 +1,637 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Zachary Chan | CS 499 ePortfolio</title>
-</head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CS 499 ePortfolio | Zachary Chan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:       #0b0d11;
+      --surface:  #12151c;
+      --border:   #1e2330;
+      --accent:   #4fffb0;
+      --accent2:  #00c8ff;
+      --muted:    #4a5568;
+      --text:     #d4dbe8;
+      --text-dim: #7a8499;
+      --font-display: 'Syne', sans-serif;
+      --font-mono:    'DM Mono', monospace;
+      --radius: 4px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-mono); font-size: 14px; line-height: 1.75; overflow-x: hidden; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.35; }
+    body::after { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px); pointer-events: none; z-index: 0; }
 
+    .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(11,13,17,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 52px; }
+    .nav-brand { font-family: var(--font-display); font-weight: 800; font-size: 15px; color: var(--accent); letter-spacing: 0.05em; }
+    .nav-links { display: flex; gap: 24px; }
+    .nav-links a { color: var(--text-dim); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--accent); text-decoration: none; }
+
+    /* HERO */
+    #hero { min-height: 92vh; display: flex; align-items: center; position: relative; overflow: hidden; }
+    .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 48px 48px; mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 100%); opacity: 0.5; }
+    .hero-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(79,255,176,0.07) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-tag { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .hero-tag::before { content: ''; display: block; width: 32px; height: 1px; background: var(--accent); }
+    h1 { font-family: var(--font-display); font-size: clamp(2.4rem,6vw,4.2rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em; color: #eef2ff; margin-bottom: 24px; }
+    h1 .accent { color: var(--accent); }
+    .hero-sub { color: var(--text-dim); max-width: 520px; font-size: 14px; margin-bottom: 40px; line-height: 1.85; }
+    .btn-row { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; border-radius: var(--radius); border: 1px solid; cursor: pointer; transition: all 0.2s; text-decoration: none !important; }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #0b0d11; font-weight: 500; }
+    .btn-primary:hover { background: #6fffbd; }
+    .btn-ghost { background: transparent; border-color: var(--border); color: var(--text-dim); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* SECTIONS */
+    section { padding: 96px 0; border-top: 1px solid var(--border); }
+    .section-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    h2 { font-family: var(--font-display); font-size: clamp(1.6rem,3.5vw,2.4rem); font-weight: 700; color: #eef2ff; margin-bottom: 40px; letter-spacing: -0.01em; }
+
+    /* PROSE */
+    .prose { color: var(--text); max-width: 700px; line-height: 1.9; }
+    .prose p { margin-bottom: 18px; }
+    .prose strong { color: var(--accent2); font-weight: 500; }
+
+    /* SKILLS */
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-top: 32px; }
+    .skill-chip { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; font-size: 12px; color: var(--text-dim); display: flex; align-items: center; gap: 8px; }
+    .skill-chip::before { content: '▸'; color: var(--accent); font-size: 10px; }
+
+    /* VIDEO */
+    .video-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; max-width: 640px; }
+    .video-thumb { aspect-ratio: 16/9; background: #0d0f14; display: flex; align-items: center; justify-content: center; position: relative; border-bottom: 1px solid var(--border); cursor: pointer; }
+    .video-thumb::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(78,255,176,0.015) 20px, rgba(78,255,176,0.015) 21px); }
+    .play-btn { width: 64px; height: 64px; background: rgba(79,255,176,0.1); border: 1.5px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 22px; transition: all 0.2s; position: relative; z-index: 1; }
+    .play-btn:hover { background: rgba(79,255,176,0.2); transform: scale(1.07); }
+    .video-meta { padding: 18px 20px; }
+    .video-meta h3 { font-family: var(--font-display); font-size: 15px; font-weight: 600; color: #eef2ff; margin-bottom: 6px; }
+    .video-meta p { color: var(--text-dim); font-size: 12px; line-height: 1.7; }
+    .video-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 12px; }
+
+    /* ORIGINAL CARDS */
+    .orig-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 600px) { .orig-grid { grid-template-columns: 1fr; } }
+    .orig-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; }
+    .orig-card h4 { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: #eef2ff; margin-bottom: 6px; }
+    .orig-card p { color: var(--text-dim); font-size: 12px; line-height: 1.65; margin-bottom: 12px; }
+    .orig-card a { font-size: 11px; padding: 5px 12px; border-radius: 2px; background: rgba(79,255,176,0.08); border: 1px solid rgba(79,255,176,0.2); color: var(--accent); letter-spacing: 0.06em; display: inline-block; }
+    .orig-card a:hover { background: rgba(79,255,176,0.15); text-decoration: none; }
+
+    /* ENHANCEMENTS */
+    .enhancements-grid { display: grid; gap: 2px; }
+    .enhancement-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: border-color 0.2s; }
+    .enhancement-card:hover { border-color: var(--accent); }
+    .enh-header { display: flex; align-items: center; gap: 16px; padding: 20px 24px; cursor: pointer; user-select: none; }
+    .enh-num { font-family: var(--font-display); font-size: 11px; font-weight: 800; letter-spacing: 0.12em; color: var(--accent); background: rgba(79,255,176,0.08); border: 1px solid rgba(79,255,176,0.2); border-radius: 3px; padding: 4px 10px; white-space: nowrap; }
+    .enh-title { font-family: var(--font-display); font-size: 16px; font-weight: 600; color: #eef2ff; flex: 1; }
+    .enh-toggle { color: var(--muted); font-size: 18px; transition: transform 0.3s; flex-shrink: 0; }
+    .enh-toggle.open { transform: rotate(45deg); }
+    .enh-body { display: none; padding: 0 24px 28px; border-top: 1px solid var(--border); }
+    .enh-body.open { display: block; }
+    .enh-body h4 { font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--accent2); margin: 22px 0 8px; letter-spacing: 0.08em; text-transform: uppercase; }
+    .enh-body p { color: var(--text-dim); font-size: 13px; margin-bottom: 10px; line-height: 1.75; }
+    .enh-outcomes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .outcome-tag { font-size: 11px; padding: 4px 10px; border-radius: 2px; background: rgba(0,200,255,0.07); border: 1px solid rgba(0,200,255,0.2); color: var(--accent2); letter-spacing: 0.06em; }
+
+    /* FILE LIST */
+    .file-list { margin-top: 14px; background: #0d0f14; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .file-list-header { background: #111318; padding: 7px 14px; font-size: 10px; color: var(--text-dim); border-bottom: 1px solid var(--border); letter-spacing: 0.1em; text-transform: uppercase; }
+    .file-item { display: flex; align-items: center; justify-content: space-between; padding: 9px 14px; border-bottom: 1px solid var(--border); gap: 12px; }
+    .file-item:last-child { border-bottom: none; }
+    .file-name { font-family: var(--font-mono); font-size: 12px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .file-badge { font-size: 10px; padding: 2px 7px; border-radius: 2px; letter-spacing: 0.06em; white-space: nowrap; }
+    .type-java { background: rgba(79,255,176,0.08); color: var(--accent); border: 1px solid rgba(79,255,176,0.15); }
+    .type-docx { background: rgba(0,200,255,0.08); color: var(--accent2); border: 1px solid rgba(0,200,255,0.15); }
+
+    /* CODE DIFF */
+    .code-diff { margin-top: 14px; background: #0d0f14; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .diff-header { background: #111318; padding: 7px 14px; font-size: 11px; color: var(--text-dim); border-bottom: 1px solid var(--border); }
+    .diff-body { padding: 14px; overflow-x: auto; }
+    .diff-body code { font-family: var(--font-mono); font-size: 12px; line-height: 1.7; color: var(--text-dim); white-space: pre; display: block; }
+    .add { color: #4fffb0; }
+    .del { color: #ff7070; opacity: 0.7; }
+    .cmt { color: #4a5568; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 40px 0; text-align: center; }
+    footer p { color: var(--text-dim); font-size: 12px; }
+    .footer-accent { color: var(--accent); }
+
+    /* ANIMATIONS */
+    .fade-in { opacity: 0; transform: translateY(20px); animation: fadeUp 0.6s ease forwards; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.22s; }
+    .delay-3 { animation-delay: 0.34s; }
+    .cursor { display: inline-block; width: 2px; height: 1em; background: var(--accent); vertical-align: text-bottom; animation: blink 1s step-end infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    @media (max-width: 600px) { .nav-links { display: none; } section { padding: 64px 0; } }
+  </style>
+</head>
 <body>
 
-<h1>Zachary Chan</h1>
-<p>Computer Science Capstone ePortfolio</p>
+<!-- NAV -->
+<nav>
+  <div class="wrap">
+    <div class="nav-brand">CS499 // Zachary Chan</div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#review">Code Review</a>
+      <a href="#original">Original</a>
+      <a href="#enhancements">Enhancements</a>
+    </div>
+  </div>
+</nav>
 
-<hr>
+<!-- HERO -->
+<section id="hero" style="border-top:none;">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="wrap hero-content">
+    <div class="hero-tag fade-in">CS 499 Capstone &mdash; Software Engineering</div>
+    <h1 class="fade-in delay-1">
+      Zachary Chan<br/>
+      <span class="accent">Software Engineer</span><span class="cursor"></span>
+    </h1>
+    <p class="hero-sub fade-in delay-2">
+      Bachelor of Science in Computer Science &mdash; SNHU.<br/>
+      This ePortfolio showcases three progressive enhancements to an Android 
+      Inventory &amp; CRUD application originally built in CS 360, demonstrating 
+      growth across software design, algorithms &amp; data structures, and databases.
+    </p>
+    <div class="btn-row fade-in delay-3">
+      <a href="#enhancements" class="btn btn-primary">▸ View Enhancements</a>
+      <a href="https://github.com/Zachan99/zachan99.github.io" target="_blank" class="btn btn-ghost">⌥ GitHub Repo</a>
+    </div>
+  </div>
+</section>
 
-<h2>Professional Self-Assessment</h2>
-<p>
-This ePortfolio represents the culmination of my work in the Computer Science program
-and highlights my development in software engineering, algorithms, databases,
-and secure computing practices.
-</p>
+<!-- SELF-ASSESSMENT -->
+<section id="about">
+  <div class="wrap">
+    <div class="section-label">01 — Professional Self-Assessment</div>
+    <h2>Shaping My CS Career</h2>
+    <div class="prose">
+      <p>
+        Throughout the Computer Science program at SNHU, I developed a strong foundation in 
+        <strong>software engineering principles</strong>, problem-solving through algorithms, 
+        and designing systems that scale. The coursework pushed me to think critically about 
+        trade-offs in design, and this capstone has been the culmination of that growth.
+      </p>
+      <p>
+        Working within <strong>collaborative team environments</strong> — from agile sprint 
+        planning in CS 250 to peer code reviews — I learned how to communicate technical ideas 
+        to both developer teammates and non-technical stakeholders. Clear documentation and 
+        structured communication are skills I carry into my professional career.
+      </p>
+      <p>
+        My focus on <strong>security-minded development</strong> is reflected throughout these 
+        enhancements. The original application stored user credentials in plain text with no 
+        validation. Through this capstone I introduced structured input validation, null 
+        checking, and laid groundwork for future password hashing — practices aligned with 
+        secure coding techniques from across the program.
+      </p>
+      <p>
+        The artifact in this portfolio — an Android Inventory &amp; CRUD application originally 
+        built in CS 360 — demonstrates my abilities across all three key categories: 
+        <strong>software design and engineering</strong>, <strong>algorithms and data 
+        structures</strong>, and <strong>databases</strong>. Each enhancement builds on the 
+        last, reflecting the iterative nature of real-world software development.
+      </p>
+      <p style="color:var(--text-dim); font-size:12px; font-style:italic;">
+        ✏️ Expand this section with your personal background, goals, and additional program reflections for your final submission.
+      </p>
+    </div>
+    <div class="skills-grid" style="margin-top:36px;">
+      <div class="skill-chip">Java / Android SDK</div>
+      <div class="skill-chip">SQLite / SQL</div>
+      <div class="skill-chip">ArrayList &amp; Collections</div>
+      <div class="skill-chip">CRUD Operations</div>
+      <div class="skill-chip">OOP Design</div>
+      <div class="skill-chip">Input Validation</div>
+      <div class="skill-chip">Sorting Algorithms</div>
+      <div class="skill-chip">Database Schema</div>
+      <div class="skill-chip">Git / GitHub</div>
+      <div class="skill-chip">Secure Coding</div>
+    </div>
+  </div>
+</section>
 
-<hr>
+<!-- CODE REVIEW -->
+<section id="review">
+  <div class="wrap">
+    <div class="section-label">02 — Informal Code Review</div>
+    <h2>Walkthrough &amp; Enhancement Plan</h2>
+    <div class="video-card">
+      <div class="video-thumb" onclick="window.open('https://www.youtube.com/watch?v=ZS01EzCEbzM','_blank')">
+        <div class="play-btn">▶</div>
+      </div>
+      <div class="video-meta">
+        <h3>CS 499 Code Review — Android Inventory App</h3>
+        <p>
+          A detailed walkthrough of the original artifact covering 
+          <code>DatabaseHelper.java</code>, <code>InventoryActivity.java</code>, 
+          <code>InventoryItem.java</code>, and <code>LoginActivity.java</code> — 
+          covering existing functionality, code analysis, and the full three-enhancement plan.
+        </p>
+        <a class="video-link" href="https://www.youtube.com/watch?v=ZS01EzCEbzM" target="_blank">↗ Open on YouTube</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-<h2>Code Review</h2>
-<p>
-https://www.youtube.com/watch?v=ZS01EzCEbzM
-</p>
+<!-- ORIGINAL ARTIFACT -->
+<section id="original">
+  <div class="wrap">
+    <div class="section-label">03 — Original Artifact</div>
+    <h2>Android Inventory App — CS 360</h2>
+    <div class="prose" style="margin-bottom:32px;">
+      <p>
+        This Android application was originally developed in <strong>CS 360: Mobile Architecture 
+        and Programming</strong>. It provides full CRUD functionality — users can create an account, 
+        log in, and manage an inventory system backed by a local <strong>SQLite database</strong>. 
+        The app also includes an SMS notification feature that alerts users when an item's 
+        quantity reaches zero.
+      </p>
+      <p>
+        The original codebase had clear areas for growth: credentials were stored in plain text, 
+        input validation was minimal, no sorting or searching existed, the update method only 
+        modified quantity (not item name), and the database schema lacked constraints like 
+        <code>NOT NULL</code> and <code>UNIQUE</code> to enforce data integrity.
+      </p>
+    </div>
+    <div class="orig-grid">
+      <div class="orig-card">
+        <h4>☕ DatabaseHelper.java</h4>
+        <p>Manages the SQLite database — creates the users and inventory tables and handles all CRUD operations. In the original, update only modified quantity and the schema had no integrity constraints.</p>
+        <a href="Original/DatabaseHelper.java">↓ View File</a>
+      </div>
+      <div class="orig-card">
+        <h4>☕ InventoryActivity.java</h4>
+        <p>Main UI activity — renders the inventory table, handles add/delete/edit interactions, and triggers SMS alerts via SmsHelper when an item hits zero quantity. No input validation in the original.</p>
+        <a href="Original/InventoryActivity.java">↓ View File</a>
+      </div>
+      <div class="orig-card">
+        <h4>☕ InventoryItem.java</h4>
+        <p>Simple data model class representing a single inventory item with an ID, name, and quantity. Used throughout the app as the core data object.</p>
+        <a href="Original/InventoryItem.java">↓ View File</a>
+      </div>
+      <div class="orig-card">
+        <h4>☕ LoginActivity.java</h4>
+        <p>Handles user registration and login against the SQLite users table. In the original, passwords were stored and compared as plain text with no hashing, validation, or null checking.</p>
+        <a href="Original/LoginActivity.java">↓ View File</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-<hr>
+<!-- ENHANCEMENTS -->
+<section id="enhancements">
+  <div class="wrap">
+    <div class="section-label">04 — Artifact Enhancements</div>
+    <h2>Three Categories of Growth</h2>
+    <div class="enhancements-grid">
 
-<h2>Artifacts</h2>
+      <!-- ENH 01: Software Design & Engineering -->
+      <div class="enhancement-card">
+        <div class="enh-header" onclick="toggleEnh(this)">
+          <span class="enh-num">ENH 01</span>
+          <span class="enh-title">Software Design &amp; Engineering</span>
+          <span class="enh-toggle">+</span>
+        </div>
+        <div class="enh-body">
+          <h4>What Was Enhanced</h4>
+          <p>
+            This enhancement focused on improving the overall software design, code quality, 
+            and security of the application. Four key areas were targeted:
+          </p>
+          <p>
+            <strong style="color:var(--accent)">Separation of concerns</strong> — Database 
+            logic was cleanly isolated in <code>DatabaseHelper</code> while UI logic remained 
+            in the Activity classes, making the codebase more modular and maintainable.
+          </p>
+          <p>
+            <strong style="color:var(--accent)">Input validation</strong> — Added checks for 
+            empty fields and invalid data entries across both the add and edit flows, reducing 
+            crash risk and improving the user experience with informative error messages.
+          </p>
+          <p>
+            <strong style="color:var(--accent)">Security improvements</strong> — The original 
+            app stored and compared user credentials in plain text. This enhancement introduced 
+            credential validation and laid the groundwork for future password hashing/encryption, 
+            moving toward a security-conscious design aligned with secure coding practices.
+          </p>
+          <p>
+            <strong style="color:var(--accent)">Error handling</strong> — Consistent error 
+            handling was applied across all database operations so the app behaves predictably 
+            in unexpected scenarios rather than crashing silently.
+          </p>
 
-<h3>Software Engineering and Design</h3>
-<p>Original and enhanced artifacts will be linked here.</p>
+          <h4>Key Code Change</h4>
+          <div class="code-diff">
+            <div class="diff-header">InventoryActivity.java — add item validation: before → after</div>
+            <div class="diff-body"><code><span class="del">- if (!name.isEmpty() && !qtyStr.isEmpty()) {</span>
+<span class="del">-     int quantity = Integer.parseInt(qtyStr); // crashes on bad input</span>
+<span class="del">-     dbHelper.insertItem(name, quantity);</span>
+<span class="del">- }</span>
 
-<h3>Algorithms and Data Structures</h3>
-<p>Enhancement details will be linked here.</p>
+<span class="add">+ if (!isValidItemInput(name, qtyStr)) return;</span>
+<span class="add">+ int quantity = parseQuantity(qtyStr);     // safe — returns -1 on bad input</span>
+<span class="add">+ if (quantity &lt; 0) {</span>
+<span class="add">+     Toast.makeText(this, "Quantity must be a valid non-negative number", ...);</span>
+<span class="add">+     return;</span>
+<span class="add">+ }</span>
+<span class="add">+ boolean success = dbHelper.insertItem(name, quantity);</span>
+<span class="add">+ if (!success) Toast.makeText(this, "Unable to add item", ...);</span>
+<span class="cmt">// Added: safe parsing, explicit validation, user-facing error feedback</span></code></div>
+          </div>
 
-<h3>Databases</h3>
-<p>Database enhancement details will be linked here.</p>
+          <h4>Files</h4>
+          <div class="file-list">
+            <div class="file-list-header">Module 3 Enhancements /</div>
+            <div class="file-item">
+              <span class="file-name">☕ DatabaseHelperEnhanced.java</span>
+              <a href="Module 3 Enhancements/DatabaseHelperEnhanced.java" class="file-badge type-java">.java</a>
+            </div>
+            <div class="file-item">
+              <span class="file-name">☕ InventoryActivityEnhanced.java</span>
+              <a href="Module 3 Enhancements/InventoryActivityEnhanced.java" class="file-badge type-java">.java</a>
+            </div>
+            <div class="file-item">
+              <span class="file-name">☕ LoginActivityEnhanced.java</span>
+              <a href="Module 3 Enhancements/LoginActivityEnhanced.java" class="file-badge type-java">.java</a>
+            </div>
+            <div class="file-item">
+              <span class="file-name">📄 CS 499 Module 3 Narrative.docx</span>
+              <a href="Module 3 Enhancements/CS 499 Module 3 Narrative.docx" class="file-badge type-docx">.docx</a>
+            </div>
+            <div class="file-item">
+              <span class="file-name">📄 CS 499 Module 3 Journal Zachary Chan.docx</span>
+              <a href="Module 3 Enhancements/CS 499 Module 3 Journal Zachary Chan.docx" class="file-badge type-docx">.docx</a>
+            </div>
+          </div>
 
+          <h4>Reflection</h4>
+          <p>
+            Restructuring the code without breaking existing functionality was the biggest 
+            challenge — particularly when modifying database interactions and UI elements together. 
+            This required careful incremental testing and reinforced the importance of modular 
+            design from the start of a project.
+          </p>
+          <h4>Course Outcomes Met</h4>
+          <div class="enh-outcomes">
+            <span class="outcome-tag">CO-3 Computing Solutions</span>
+            <span class="outcome-tag">CO-4 Innovative Techniques</span>
+            <span class="outcome-tag">CO-5 Security Mindset</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENH 02: Algorithms & Data Structures -->
+      <div class="enhancement-card" style="margin-top:2px;">
+        <div class="enh-header" onclick="toggleEnh(this)">
+          <span class="enh-num">ENH 02</span>
+          <span class="enh-title">Algorithms &amp; Data Structures</span>
+          <span class="enh-toggle">+</span>
+        </div>
+        <div class="enh-body">
+          <h4>What Was Enhanced</h4>
+          <p>
+            This enhancement introduced algorithmic thinking and structured data management 
+            to the application. The inventory list — stored as an 
+            <strong style="color:var(--accent)">ArrayList&lt;InventoryItem&gt;</strong> — 
+            became the foundation for new sort and search capabilities:
+          </p>
+          <p>
+            <strong style="color:var(--accent)">Sort by name</strong> — <code>Collections.sort()</code> 
+            with a custom <code>Comparator</code> organizes items alphabetically (case-insensitive).
+          </p>
+          <p>
+            <strong style="color:var(--accent)">Sort by quantity</strong> — A second comparator 
+            sorts items numerically from lowest to highest, helping users quickly identify low-stock items.
+          </p>
+          <p>
+            <strong style="color:var(--accent)">Linear search / filter</strong> — 
+            <code>filterItemsByName()</code> traverses the ArrayList and returns items whose 
+            names contain the search query as a case-insensitive substring match.
+          </p>
+          <p>
+            <strong style="color:var(--accent)">Full update fix</strong> — 
+            <code>DatabaseHelper.updateItem()</code> was upgraded to modify both item name 
+            and quantity, fixing a limitation of the original which could only update quantity.
+          </p>
+
+          <h4>Key Code Change</h4>
+          <div class="code-diff">
+            <div class="diff-header">InventoryActivityEnhanced.java — sort &amp; filter added</div>
+            <div class="diff-body"><code><span class="cmt">// Sort alphabetically by name (case-insensitive)</span>
+<span class="add">+ private void sortItemsByName(ArrayList&lt;InventoryItem&gt; items) {</span>
+<span class="add">+     Collections.sort(items, (a, b) -&gt;</span>
+<span class="add">+         a.getName().compareToIgnoreCase(b.getName()));</span>
+<span class="add">+ }</span>
+
+<span class="cmt">// Linear search filter — returns matching subset of ArrayList</span>
+<span class="add">+ private ArrayList&lt;InventoryItem&gt; filterItemsByName(String query, ArrayList&lt;InventoryItem&gt; items) {</span>
+<span class="add">+     ArrayList&lt;InventoryItem&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="add">+     for (InventoryItem item : items) {</span>
+<span class="add">+         if (item.getName().toLowerCase().contains(query.toLowerCase()))</span>
+<span class="add">+             result.add(item);</span>
+<span class="add">+     }</span>
+<span class="add">+     return result;</span>
+<span class="add">+ }</span>
+
+<span class="cmt">// DatabaseHelper: update now modifies both name AND quantity</span>
+<span class="del">- public boolean updateItemQuantity(int id, int newQuantity) { ... }</span>
+<span class="add">+ public boolean updateItem(int id, String newName, int newQuantity) { ... }</span></code></div>
+          </div>
+
+          <h4>Files</h4>
+          <div class="file-list">
+            <div class="file-list-header">Module 4 Enhancements /</div>
+            <div class="file-item">
+              <span class="file-name">☕ DatabaseHelperEnhancedv2.java</span>
+              <a href="Module 4 Enhancements/DatabaseHelperEnhancedv2.java" class="file-badge type-java">.java</a>
+            </div>
+            <div class="file-item">
+              <span class="file-name">☕ InventoryActivityEnhanced.java</span>
+              <a href="Module 4 Enhancements/InventoryActivityEnhanced.java" class="file-badge type-java">.java</a>
+            </div>
+            <div class="file-item">
+              <span class="file-name">📄 CS 499 Module 4 Narrative.docx</span>
+              <a href="Module 4 Enhancements/CS 499 Module 4 Narrative.docx" class="file-badge type-docx">.docx</a>
+            </div>
+            <div class="file-item">
+              <span class="file-name">📄 CS 499 Module 4 Journal Zachary Chan.docx</span>
+              <a href="Module 4 Enhancements/CS 499 Module 4 Journal Zachary Chan.docx" class="file-badge type-docx">.docx</a>
+            </div>
+          </div>
+
+          <h4>Reflection</h4>
+          <p>
+            The primary challenge was integrating sorting and filtering into the existing 
+            table-based UI without disrupting live database data. Testing required confirming 
+            that sorted or filtered results remained consistent after add, edit, and delete 
+            operations — reinforcing the value of careful state management and incremental testing.
+          </p>
+          <h4>Course Outcomes Met</h4>
+          <div class="enh-outcomes">
+            <span class="outcome-tag">CO-3 Computing Solutions</span>
+            <span class="outcome-tag">CO-4 Innovative Techniques</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENH 03: Databases -->
+      <div class="enhancement-card" style="margin-top:2px;">
+        <div class="enh-header" onclick="toggleEnh(this)">
+          <span class="enh-num">ENH 03</span>
+          <span class="enh-title">Databases</span>
+          <span class="enh-toggle">+</span>
+        </div>
+        <div class="enh-body">
+          <h4>What Was Enhanced</h4>
+          <p>
+            This enhancement focused entirely on strengthening the database layer — improving 
+            schema design, data integrity, query flexibility, and database-driven features:
+          </p>
+          <p>
+            <strong style="color:var(--accent)">Schema constraints</strong> — The database 
+            version was incremented to v2. Both tables now enforce <code>NOT NULL</code> on 
+            all columns, and <code>item_name</code> in the inventory table is now 
+            <code>UNIQUE</code>, preventing duplicate entries at the database level.
+          </p>
+          <p>
+            <strong style="color:var(--accent)">insertOrUpdateItem()</strong> — A new 
+            upsert method checks whether an item already exists by name. If it does, the 
+            quantities are combined; if not, a new record is inserted. This prevents 
+            duplicate inventory entries and improves data reliability.
+          </p>
+          <p>
+            <strong style="color:var(--accent)">getItemByName()</strong> — A targeted 
+            lookup method that retrieves a single inventory item by name using a parameterized 
+            query, supporting the upsert logic and enabling more precise database access.
+          </p>
+          <p>
+            <strong style="color:var(--accent)">getLowStockItems(threshold)</strong> — A 
+            database-driven reporting method that queries inventory items at or below a given 
+            quantity threshold, sorted ascending by quantity. This enables smarter inventory 
+            management directly from the database layer.
+          </p>
+          <p>
+            <strong style="color:var(--accent)">Ordered retrieval</strong> — 
+            <code>getInventoryItemList()</code> was upgraded from a raw <code>SELECT *</code> 
+            query to an ordered query using <code>ORDER BY item_name ASC</code>, ensuring 
+            consistent alphabetical results on every load.
+          </p>
+          <p>
+            <strong style="color:var(--accent)">Input validation at the data layer</strong> — 
+            All database methods now include null and empty-string checks before any database 
+            operation is performed, preventing invalid data from ever reaching the database.
+          </p>
+
+          <h4>Key Code Change</h4>
+          <div class="code-diff">
+            <div class="diff-header">DatabaseHelperEnchanced2.java — key database improvements</div>
+            <div class="diff-body"><code><span class="cmt">// Schema: added NOT NULL + UNIQUE constraints (v1 → v2)</span>
+<span class="del">- COLUMN_ITEM_NAME + " TEXT, "</span>
+<span class="del">- COLUMN_ITEM_QUANTITY + " INTEGER)"</span>
+<span class="add">+ COLUMN_ITEM_NAME + " TEXT UNIQUE NOT NULL, "</span>
+<span class="add">+ COLUMN_ITEM_QUANTITY + " INTEGER NOT NULL)"</span>
+
+<span class="cmt">// New: upsert — combines quantity if item exists, inserts if not</span>
+<span class="add">+ public boolean insertOrUpdateItem(String itemName, int quantity) {</span>
+<span class="add">+     InventoryItem existing = getItemByName(itemName);</span>
+<span class="add">+     if (existing != null)</span>
+<span class="add">+         return updateItem(existing.getId(), itemName, existing.getQuantity() + quantity);</span>
+<span class="add">+     return insertItem(itemName, quantity);</span>
+<span class="add">+ }</span>
+
+<span class="cmt">// New: low-stock report query — ordered by quantity ASC</span>
+<span class="add">+ public ArrayList&lt;InventoryItem&gt; getLowStockItems(int threshold) {</span>
+<span class="add">+     Cursor cursor = db.query(TABLE_INVENTORY, null,</span>
+<span class="add">+         COLUMN_ITEM_QUANTITY + "&lt;=?", new String[]{String.valueOf(threshold)},</span>
+<span class="add">+         null, null, COLUMN_ITEM_QUANTITY + " ASC");</span>
+<span class="add">+     // ... build and return ArrayList</span>
+<span class="add">+ }</span>
+
+<span class="cmt">// Upgraded: getInventoryItemList() now uses ordered query</span>
+<span class="del">- Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_INVENTORY, null);</span>
+<span class="add">+ Cursor cursor = db.query(TABLE_INVENTORY, null, null, null, null, null,</span>
+<span class="add">+     COLUMN_ITEM_NAME + " ASC");</span></code></div>
+          </div>
+
+          <h4>Files</h4>
+          <div class="file-list">
+            <div class="file-list-header">Module 5 Enhancements /</div>
+            <div class="file-item">
+              <span class="file-name">☕ DatabaseHelperEnchanced2.java</span>
+              <a href="Module 5 Enhancements/DatabaseHelperEnchanced2.java" class="file-badge type-java">.java</a>
+            </div>
+            <div class="file-item">
+              <span class="file-name">📄 CS 499 Module 5 Narrative Zachary Chan.docx</span>
+              <a href="Module 5 Enhancements/CS 499 Module 5 Narrative Zachary Chan.docx" class="file-badge type-docx">.docx</a>
+            </div>
+          </div>
+
+          <h4>Reflection</h4>
+          <p>
+            The primary challenge was modifying the existing database structure — incrementing 
+            the schema version and ensuring <code>onUpgrade()</code> handled the transition 
+            correctly without corrupting existing data. Testing required careful attention to 
+            how data was stored, retrieved, and updated at each stage, demonstrating that 
+            effective database work requires strategic planning, thorough testing, and 
+            stepwise development.
+          </p>
+          <h4>Course Outcomes Met</h4>
+          <div class="enh-outcomes">
+            <span class="outcome-tag">CO-3 Computing Solutions</span>
+            <span class="outcome-tag">CO-4 Innovative Techniques</span>
+            <span class="outcome-tag">CO-5 Security Mindset</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <p>
+      <span class="footer-accent">Zachary Chan</span> &mdash; CS 499 Capstone &mdash; SNHU &mdash;
+      <span class="footer-accent">Software Engineering</span>
+    </p>
+    <p style="margin-top:6px;">
+      <a href="https://github.com/Zachan99/zachan99.github.io" target="_blank" style="color:var(--text-dim); font-size:12px;">⌥ github.com/Zachan99</a>
+    </p>
+  </div>
+</footer>
+
+<script>
+  function toggleEnh(header) {
+    const toggle = header.querySelector('.enh-toggle');
+    const body   = header.nextElementSibling;
+    const isOpen = body.classList.contains('open');
+    document.querySelectorAll('.enh-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.enh-toggle').forEach(t => t.classList.remove('open'));
+    if (!isOpen) { body.classList.add('open'); toggle.classList.add('open'); }
+  }
+</script>
 </body>
 </html>
